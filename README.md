@@ -2,6 +2,13 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+## Add CS contract address to wallet
+
+Contract address : 0xbD424ce41F741FA4f84dEE13CCDDaee23Ee6310A
+
+[Verify CS on testnet](https://testnet.aiascan.com/token/0xbD424ce41F741FA4f84dEE13CCDDaee23Ee6310A)
+
+
 First, run the development server:
 
 ```bash

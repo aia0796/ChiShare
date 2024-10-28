@@ -1,6 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import { BrowserProvider, ethers } from 'ethers';
+import contractAbi from "../contractInfo/contractAbi.json"
+import contractAddress from "../contractInfo/contractAddress.json"
 import { motion } from 'framer-motion';
 import { 
   ChefHat, Search, Wallet, Star, Clock, BookOpen, 
@@ -84,6 +87,16 @@ export default function Explore() {
     }
   };
 
+  const withdraw = async () =>{
+    const {abi} = contractAbi;
+    const provider = new BrowserProvider(window.ethereum);
+    const amount = 100;
+    const signer = await provider.getSigner();
+    const address = await signer.getAddress();
+    const bounceContract = new ethers.Contract(contractAddress.address, abi, signer)
+
+    await (await bounceContract.mint(address, ethers.parseUnits(amount.toString(), 18))).wait();
+  }
 
   // Sample Categories
   const categories = ['All', 'Asian', 'Italian', 'Mexican', 'Desserts', 'Vegan'];
@@ -98,6 +111,23 @@ export default function Explore() {
     setPopupVisible(false);
     setSelectedRecipe(null);
   };
+
+  const handleConfirm = () => {
+    closePopup();
+    deposit();
+  }
+
+  const deposit = async () =>{
+    const {abi} = contractAbi;
+    const provider = new BrowserProvider(window.ethereum);
+    const amount = selectedRecipe?.coinCost;
+    const signer = await provider.getSigner();
+    const address = await signer.getAddress();
+    const bounceContract = new ethers.Contract(contractAddress.address, abi, signer)
+
+    await (await bounceContract.donate(address,"0x94A7Af5edB47c3B91d1B4Ffc2CA535d7aDA8CEDe", ethers.parseUnits(amount.toString(), 18))).wait();
+  }
+
 
   // Sample Recipes Data
   const recipes: Recipe[] = [
@@ -248,6 +278,7 @@ export default function Explore() {
                     className="bg-white text-orange-600 px-6 py-2 rounded-full font-medium flex items-center gap-2"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={withdraw}
                   >
                     <Gift size={20} />
                     Claim 100 Coins
@@ -354,7 +385,7 @@ export default function Explore() {
                   To access <strong>{selectedRecipe.title}</strong>, you need {selectedRecipe.coinCost} tokens.
                 </p>
                 <button 
-                  onClick={closePopup}
+                  onClick={handleConfirm}
                   className="w-full bg-orange-600 text-white py-2 rounded-full font-medium"
                 >
                   Confirm

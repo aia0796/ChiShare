@@ -8,6 +8,19 @@ Contract address : 0xbD424ce41F741FA4f84dEE13CCDDaee23Ee6310A
 
 [Verify CS on testnet](https://testnet.aiascan.com/token/0xbD424ce41F741FA4f84dEE13CCDDaee23Ee6310A)
 
+Copy code
+# CookShare
+
+**CookShare** is a Web3 platform where aspiring chefs can share their unique recipes with the world. Users who try out these recipes can support the chefs by donating or funding them, fostering a supportive community around culinary creativity and innovation.
+
+## Key Features
+
+- **Recipe Sharing**: Users can upload and share their recipes, showcasing culinary techniques, ingredients, and preparation steps.
+- **Community Support**: Members can try recipes, rate them, and financially support the chefs by donating tokens.
+- **Decentralized Platform**: Built on a blockchain network to ensure transparency and reward distribution for chefs.
+- **Secure Transactions**: Enables donations and funding using blockchain-based tokens, ensuring safe and verifiable transactions.
+- **Chef Profiles**: Chefs can create profiles to display their work, build a following, and interact with supporters.
+
 
 First, run the development server:
 

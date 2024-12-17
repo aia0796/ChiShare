@@ -5,8 +5,8 @@ import { BrowserProvider, ethers } from 'ethers';
 import contractAbi from "../contractInfo/contractAbi.json"
 import contractAddress from "../contractInfo/contractAddress.json"
 import { motion } from 'framer-motion';
-import { 
-  ChefHat, Search, Wallet, Star, Clock, BookOpen, 
+import {
+  ChefHat, Search, Wallet, Star, Clock, BookOpen,
   Filter, ArrowRight, Gift, Coins, Trophy, Heart,
   User,
   XCircle
@@ -47,13 +47,13 @@ const fadeInUp = {
 };
 
 declare global {
-    interface Window {
-      ethereum?: {
-        isMetaMask: boolean;
-        request: (args: { method: string; params?: any[] }) => Promise<any>;
-      };
-    }
+  interface Window {
+    ethereum?: {
+      isMetaMask: boolean;
+      request: (args: { method: string; params?: any[] }) => Promise<any>;
+    };
   }
+}
 
 const staggerContainer = {
   hidden: { opacity: 0 },
@@ -87,15 +87,17 @@ export default function Explore() {
     }
   };
 
-  const withdraw = async () =>{
-    const {abi} = contractAbi;
-    const provider = new BrowserProvider(window.ethereum);
-    const amount = 100;
-    const signer = await provider.getSigner();
-    const address = await signer.getAddress();
-    const bounceContract = new ethers.Contract(contractAddress.address, abi, signer)
+  const withdraw = async () => {
+    const { abi } = contractAbi;
+    if (window.ethereum != undefined) {
+      const provider = new BrowserProvider(window.ethereum);
+      const amount = 100;
+      const signer = await provider.getSigner();
+      const address = await signer.getAddress();
+      const bounceContract = new ethers.Contract(contractAddress.address, abi, signer)
 
-    await (await bounceContract.mint(address, ethers.parseUnits(amount.toString(), 18))).wait();
+      await (await bounceContract.mint(address, ethers.parseUnits(amount.toString(), 18))).wait();
+    }
   }
 
   // Sample Categories
@@ -117,15 +119,17 @@ export default function Explore() {
     deposit();
   }
 
-  const deposit = async () =>{
-    const {abi} = contractAbi;
-    const provider = new BrowserProvider(window.ethereum);
-    const amount = selectedRecipe?.coinCost;
-    const signer = await provider.getSigner();
-    const address = await signer.getAddress();
-    const bounceContract = new ethers.Contract(contractAddress.address, abi, signer)
+  const deposit = async () => {
+    const { abi } = contractAbi;
+    if (window.ethereum != undefined) {
+      const provider = new BrowserProvider(window.ethereum);
+      const amount = selectedRecipe?.coinCost || 2;
+      const signer = await provider.getSigner();
+      const address = await signer.getAddress();
+      const bounceContract = new ethers.Contract(contractAddress.address, abi, signer)
 
-    await (await bounceContract.donate(address,"0x94A7Af5edB47c3B91d1B4Ffc2CA535d7aDA8CEDe", ethers.parseUnits(amount.toString(), 18))).wait();
+      await (await bounceContract.donate(address, "0x94A7Af5edB47c3B91d1B4Ffc2CA535d7aDA8CEDe", ethers.parseUnits(amount.toString(), 18))).wait();
+    }
   }
 
 
@@ -202,16 +206,16 @@ export default function Explore() {
       {/* Navigation */}
       <nav className="fixed w-full z-50 px-8 py-4 bg-white/90 backdrop-blur-sm shadow-lg text-gray-900">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <Link href="/">
-          <motion.div 
-            className="flex items-center gap-2"
-            whileHover={{ scale: 1.05 }}
-          >
-            <ChefHat size={32} className="text-orange-600" />
-            <span className="text-2xl font-bold text-orange-600">
-              CookShare
-            </span>
-          </motion.div>
+          <Link href="/">
+            <motion.div
+              className="flex items-center gap-2"
+              whileHover={{ scale: 1.05 }}
+            >
+              <ChefHat size={32} className="text-orange-600" />
+              <span className="text-2xl font-bold text-orange-600">
+                CookShare
+              </span>
+            </motion.div>
           </Link>
 
           {/* Search Bar */}
@@ -230,31 +234,29 @@ export default function Explore() {
 
           {/* Wallet Connection */}
           {!walletConnected ? (
-          <motion.button
-            className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium ${
-              walletConnected 
-                ? 'bg-green-100 text-green-700' 
-                : 'bg-orange-600 text-white'
-            }`}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={connectWallet}
-          >
-           Connect Wallet
-          </motion.button>
-          ) : ( 
             <motion.button
-            className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium ${
-              walletConnected 
-                ? 'bg-green-100 text-green-700' 
+              className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium ${walletConnected
+                ? 'bg-green-100 text-green-700'
                 : 'bg-orange-600 text-white'
-            }`}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            
-          >
-           <span >{walletAddress.slice(0, 5) + '...' + walletAddress.slice(-4)}</span>
-          </motion.button>
+                }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={connectWallet}
+            >
+              Connect Wallet
+            </motion.button>
+          ) : (
+            <motion.button
+              className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium ${walletConnected
+                ? 'bg-green-100 text-green-700'
+                : 'bg-orange-600 text-white'
+                }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+
+            >
+              <span >{walletAddress.slice(0, 5) + '...' + walletAddress.slice(-4)}</span>
+            </motion.button>
           )}
         </div>
       </nav>
@@ -303,11 +305,10 @@ export default function Explore() {
             {categories.map((category) => (
               <motion.button
                 key={category}
-                className={`px-6 py-2 rounded-full font-medium ${
-                  selectedCategory === category
-                    ? 'bg-orange-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-orange-50'
-                }`}
+                className={`px-6 py-2 rounded-full font-medium ${selectedCategory === category
+                  ? 'bg-orange-600 text-white'
+                  : 'bg-white text-gray-700 hover:bg-orange-50'
+                  }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedCategory(category)}
@@ -329,7 +330,7 @@ export default function Explore() {
                   whileHover={{ y: -10, scale: 1.02 }}
                   onClick={() => handleRecipeClick(recipe)}
                 >
-                  <img 
+                  <img
                     src={recipe.image}
                     alt={recipe.title}
                     className="w-full h-48 object-cover"
@@ -367,14 +368,14 @@ export default function Explore() {
 
           {/* Recipe Popup */}
           {popupVisible && selectedRecipe && (
-            <motion.div 
+            <motion.div
               className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
               <div className="bg-white p-8 rounded-lg shadow-lg relative max-w-md w-full">
-                <button 
+                <button
                   onClick={closePopup}
                   className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
                 >
@@ -384,7 +385,7 @@ export default function Explore() {
                 <p className="text-gray-700 mb-6">
                   To access <strong>{selectedRecipe.title}</strong>, you need {selectedRecipe.coinCost} tokens.
                 </p>
-                <button 
+                <button
                   onClick={handleConfirm}
                   className="w-full bg-orange-600 text-white py-2 rounded-full font-medium"
                 >
@@ -403,7 +404,7 @@ export default function Explore() {
                   variants={fadeInUp}
                   whileHover={{ y: -10, scale: 1.02 }}
                 >
-                  <img 
+                  <img
                     src={expert.image}
                     alt={expert.name}
                     className="w-full h-48 object-cover"

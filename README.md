@@ -2,11 +2,11 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-## Add CS contract address to wallet
+## Add COOK contract address to wallet
 
-Contract address : 0xbD424ce41F741FA4f84dEE13CCDDaee23Ee6310A
+Contract address : 0x237FBAB89cB5342019c5AA5c80A83844cf0CD45a
 
-[Verify CS on testnet](https://testnet.aiascan.com/token/0xbD424ce41F741FA4f84dEE13CCDDaee23Ee6310A)
+[Verify COOK on testnet](https://explorer.sepolia.mantle.xyz/token/0x237FBAB89cB5342019c5AA5c80A83844cf0CD45a)
 
 Copy code
 # CookShare
